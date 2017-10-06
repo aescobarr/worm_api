@@ -1,3 +1,9 @@
+worm_api/settings_local.py*
+.idea/*
+*.sublime-project
+*.sublime-workspace
+*.sublime*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
