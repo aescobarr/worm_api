@@ -40,7 +40,7 @@ class WormUserSerializer(serializers.ModelSerializer):
         return wormuser
 
     def validate_email(self,value):
-        if WormUser.objects.filter(user__email=value).exclude(id=self.instance.id).exists():
+        if self and self.instance and self.instance.ide and WormUser.objects.filter(user__email=value).exclude(id=self.instance.id).exists():
             raise serializers.ValidationError("There is a user with this email address already!")
         return value
 
