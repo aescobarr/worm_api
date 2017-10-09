@@ -18,7 +18,7 @@ class WormUser(models.Model):
         if created:
             Token.objects.create(user=instance)
 
-    def __repr__(self):
+    def __str__(self):
         return self.user.username
 
 
@@ -28,6 +28,9 @@ class Obstacle(models.Model):
     width = models.IntegerField()
     height = models.IntegerField()
 
+    def __str__(self):
+        return str(self.id)
+
 
 class Decor(models.Model):
     coord_x = models.IntegerField()
@@ -35,6 +38,8 @@ class Decor(models.Model):
     width = models.IntegerField()
     height = models.IntegerField()
 
+    def __str__(self):
+        return str(self.id)
 
 class Bacterium(models.Model):
     coord_x = models.IntegerField()
@@ -43,6 +48,8 @@ class Bacterium(models.Model):
     height = models.IntegerField()
     score = models.IntegerField()
 
+    def __str__(self):
+        return str(self.id)
 
 class Scenario(models.Model):
     world_num = models.IntegerField(db_index=True)
@@ -56,6 +63,8 @@ class Scenario(models.Model):
     decors = models.ManyToManyField(Decor)
     bacteria = models.ManyToManyField(Bacterium)
 
+    def __str__(self):
+        return str(self.id)
 
 ACTION_CHOICES = (('turn_right','Turn right'), ('turn_left','Turn left'), ('collision','Player crashed against an obstacle'), ('element_viewed','Player discovered resource'), ('element_caught','Player picked up resource'), ('start','Player started game'), ('end', 'Player ended game'))
 
