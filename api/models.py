@@ -5,12 +5,18 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 
 
 class WormUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1)
     birth_date = models.CharField(max_length=8,default='')
+
+    @receiver(post_save, sender=User)
+    def create_auth_token(sender, instance=None, created=False, **kwargs):
+        if created:
+            Token.objects.create(user=instance)
 
     def __repr__(self):
         return self.user.username

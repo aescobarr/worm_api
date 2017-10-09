@@ -35,3 +35,12 @@ class BacteriumViewSet(viewsets.ModelViewSet):
 class ActionViewSet(viewsets.ModelViewSet):
     queryset = Action.objects.all()
     serializer_class = ActionSerializer
+
+    def get_serializer(self, *args, **kwargs):
+        if "data" in kwargs:
+            data = kwargs["data"]
+
+            if isinstance(data, list):
+                kwargs["many"] = True
+
+        return super(ActionViewSet, self).get_serializer(*args, **kwargs)
