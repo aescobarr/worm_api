@@ -1,6 +1,5 @@
-worm_api/settings.pyc
+*.pyc
 worm_api/settings_local.py
-worm_api/settings_local.pyc
 .idea/*
 *.sublime-project
 *.sublime-workspace
