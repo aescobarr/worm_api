@@ -2,10 +2,17 @@
 from __future__ import unicode_literals
 from rest_framework import viewsets
 from django.shortcuts import render
-from api.models import WormUser, Scenario, Obstacle, Decor, Bacterium, Action
-from api.serializers import WormUserSerializer, ScenarioSerializer, ObstacleSerializer, DecorSerializer, BacteriumSerializer, ActionSerializer
+from api.models import WormUser, Scenario, Action, Decor, Obstacle, Bacterium
+from api.serializers import WormUserSerializer, ScenarioSerializer, ActionSerializer, BacteriumSerializer, DecorSerializer, ObstacleSerializer
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from rest_framework.decorators import api_view
+from rest_framework.exceptions import ParseError
+from django.shortcuts import get_object_or_404
+from django.contrib.auth import authenticate
+from rest_framework.response import Response
 
-# Create your views here.
+
 
 class WormUserViewSet(viewsets.ModelViewSet):
     queryset = WormUser.objects.all()
@@ -44,3 +51,22 @@ class ActionViewSet(viewsets.ModelViewSet):
                 kwargs["many"] = True
 
         return super(ActionViewSet, self).get_serializer(*args, **kwargs)
+
+
+@api_view(['POST'])
+def api_login(request):
+    if request.method == 'POST':
+        email = request.data.get('email', '')
+        password = request.data.get('password', '')
+
+        if email == '' or password == '':
+            raise ParseError(detail='Email and password are mandatory')
+
+        user = get_object_or_404(User,email=email)
+
+        user = authenticate(username=user.username,password=password)
+
+        if user is not None:
+            return Response({'data': user.id})
+        else:
+            raise ParseError(detail='Authentication error')
