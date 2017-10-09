@@ -21,9 +21,9 @@ from api import views
 router = routers.DefaultRouter()
 router.register(r'wormuser', views.WormUserViewSet, base_name='wormuser')
 router.register(r'scenario', views.ScenarioViewSet, base_name='scenario')
-router.register(r'obstacle', views.ObstacleViewSet, base_name='obstacle')
-router.register(r'decor', views.DecorViewSet, base_name='decor')
-router.register(r'bacterium', views.BacteriumViewSet, base_name='bacterium')
+#router.register(r'obstacle', views.ObstacleViewSet, base_name='obstacle')
+#router.register(r'decor', views.DecorViewSet, base_name='decor')
+#router.register(r'bacterium', views.BacteriumViewSet, base_name='bacterium')
 router.register(r'action', views.ActionViewSet, base_name='action')
 
 urlpatterns = [
