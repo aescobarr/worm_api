@@ -10,7 +10,6 @@ from rest_framework.authtoken.models import Token
 
 class WormUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    wormname = models.CharField(max_length=150)
     gender = models.CharField(max_length=1)
     birth_date = models.CharField(max_length=8)
 
@@ -20,7 +19,7 @@ class WormUser(models.Model):
             Token.objects.create(user=instance)
 
     def __str__(self):
-        return self.wormname
+        return self.user.email
 
 
 class Scenario(models.Model):

@@ -14,7 +14,7 @@ class WormUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = WormUser
         #fields = ('id', 'username', 'first_name', 'last_name', 'birth_date', 'gender', 'email', 'password')
-        fields = ('id', 'wormname', 'first_name', 'last_name', 'birth_date', 'gender', 'email', 'password')
+        fields = ('id', 'first_name', 'last_name', 'birth_date', 'gender', 'email', 'password')
 
     def update(self, instance, validated_data):
         #instance.user.username = validated_data.get('user.username', instance.user.username)
@@ -23,7 +23,6 @@ class WormUserSerializer(serializers.ModelSerializer):
         instance.user.email = validated_data.get('user.email', instance.user.email)
         instance.user.password = validated_data.get('user.password', instance.user.password)
         instance.birth_date = validated_data.get('birth_date', instance.birth_date)
-        instance.wormname = validated_data.get('wormname', instance.birth_date)
         instance.gender = validated_data.get('gender', instance.gender)
         instance.save()
         return instance
@@ -37,7 +36,7 @@ class WormUserSerializer(serializers.ModelSerializer):
                                         password=validated_data.get('user')['password'],
                                         )
 
-        wormuser = WormUser.objects.create(birth_date=validated_data.get('birth_date'),gender=validated_data.get('gender'), wormname=validated_data.get('wormname'), user=user)
+        wormuser = WormUser.objects.create(birth_date=validated_data.get('birth_date'),gender=validated_data.get('gender'), user=user)
         return wormuser
 
     def validate_email(self,value):
