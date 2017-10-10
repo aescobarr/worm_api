@@ -39,13 +39,13 @@ class WormUserSerializer(serializers.ModelSerializer):
                                         password=validated_data.get('user')['password'],
                                         )
         except IntegrityError as ext:
-            raise serializers.ValidationError("There is a user with this email address already!")
+            raise serializers.ValidationError(detail="There is a user with this email address already!")
         wormuser = WormUser.objects.create(birth_date=validated_data.get('birth_date'),gender=validated_data.get('gender'), user=user)
         return wormuser
 
     def validate_email(self,value):
         if self and self.instance and self.instance.ide and WormUser.objects.filter(user__email=value).exclude(id=self.instance.id).exists():
-            raise serializers.ValidationError("There is a user with this email address already!")
+            raise serializers.ValidationError(detail="There is a user with this email address already!")
         return value
 
 
