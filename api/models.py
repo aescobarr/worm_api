@@ -38,6 +38,13 @@ class Scenario(models.Model):
     def __str__(self):
         return str(self.token_partida)
 
+    def get_points(self):
+        max_points = 0
+        for end_action in self.actions.filter(event='end'):
+            if end_action.total_points > max_points:
+                max_points = end_action.total_points
+        return max_points
+
 
 class Obstacle(models.Model):
     coord_x = models.IntegerField()

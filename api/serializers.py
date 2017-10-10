@@ -32,12 +32,7 @@ class WormUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         email = validated_data.get('user')['email']
         try:
-            user = User.objects.create_user(username=email,
-                                        first_name=validated_data.get('user')['first_name'],
-                                        last_name=validated_data.get('user')['last_name'],
-                                        email=email,
-                                        password=validated_data.get('user')['password'],
-                                        )
+            user = User.objects.create_user(username=email,first_name=validated_data.get('user')['first_name'],last_name=validated_data.get('user')['last_name'],email=email,password=validated_data.get('user')['password'],)
         except IntegrityError as ext:
             raise serializers.ValidationError(detail="There is a user with this email address already!")
         wormuser = WormUser.objects.create(birth_date=validated_data.get('birth_date'),gender=validated_data.get('gender'), user=user)
