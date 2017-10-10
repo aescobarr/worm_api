@@ -13,8 +13,21 @@ from django.contrib.auth import authenticate
 from rest_framework.response import Response
 
 
+class VerboseCreateModelMixin(object):
+    """
+    Create a model instance and return either created object or the validation errors.
+    """
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=201, headers=headers)
+        else:
+            return Response(serializer.errors, status=400)
 
-class WormUserViewSet(viewsets.ModelViewSet):
+
+class WormUserViewSet(VerboseCreateModelMixin, viewsets.ModelViewSet):
     queryset = WormUser.objects.all()
     serializer_class = WormUserSerializer
 
@@ -62,11 +75,16 @@ def api_login(request):
         if email == '' or password == '':
             raise ParseError(detail='Email and password are mandatory')
 
-        user = get_object_or_404(User,email=email)
+        user = get_object_or_404(User, email=email)
 
-        user = authenticate(username=user.username,password=password)
+        user = authenticate(username=user.username, password=password)
 
         if user is not None:
-            return Response({'data': user.id})
+            wormuser = WormUser.objects.get(user=user)
+            levels = Scenario.objects.filter(user=wormuser)
+            level_data = []
+            for level in levels:
+                level_data.append({"screen_id":level.id,"points": "don't know yet how to compute this"})
+            return Response({'user': wormuser.id, "levels": level_data})
         else:
             raise ParseError(detail='Authentication error')

@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from api.models import WormUser, Scenario, Action, Bacterium, Decor, Obstacle
+from django.db import IntegrityError
 
 
 
@@ -30,13 +31,15 @@ class WormUserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         email = validated_data.get('user')['email']
-        user = User.objects.create_user(username=email,
+        try:
+            user = User.objects.create_user(username=email,
                                         first_name=validated_data.get('user')['first_name'],
                                         last_name=validated_data.get('user')['last_name'],
                                         email=email,
                                         password=validated_data.get('user')['password'],
                                         )
-
+        except IntegrityError as ext:
+            raise serializers.ValidationError("There is a user with this email address already!")
         wormuser = WormUser.objects.create(birth_date=validated_data.get('birth_date'),gender=validated_data.get('gender'), user=user)
         return wormuser
 
