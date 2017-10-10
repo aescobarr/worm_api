@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from api.models import WormUser, Scenario, Action, Bacterium, Decor, Obstacle
-import uuid
+
 
 
 class WormUserSerializer(serializers.ModelSerializer):
@@ -21,6 +21,7 @@ class WormUserSerializer(serializers.ModelSerializer):
         instance.user.first_name = validated_data.get('user.first_name', instance.user.first_name)
         instance.user.last_name = validated_data.get('user.last_name', instance.user.last_name)
         instance.user.email = validated_data.get('user.email', instance.user.email)
+        instance.user.username = instance.user.email
         instance.user.password = validated_data.get('user.password', instance.user.password)
         instance.birth_date = validated_data.get('birth_date', instance.birth_date)
         instance.gender = validated_data.get('gender', instance.gender)
@@ -28,11 +29,11 @@ class WormUserSerializer(serializers.ModelSerializer):
         return instance
 
     def create(self, validated_data):
-        user_uuid = uuid.uuid1()
-        user = User.objects.create_user(username=str(user_uuid),
+        email = validated_data.get('user')['email']
+        user = User.objects.create_user(username=email,
                                         first_name=validated_data.get('user')['first_name'],
                                         last_name=validated_data.get('user')['last_name'],
-                                        email=validated_data.get('user')['email'],
+                                        email=email,
                                         password=validated_data.get('user')['password'],
                                         )
 
