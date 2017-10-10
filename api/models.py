@@ -24,8 +24,8 @@ class WormUser(models.Model):
 
 class Scenario(models.Model):
     token_partida = models.CharField(max_length=150)
-    world_num = models.IntegerField(db_index=True)
-    level_num = models.IntegerField(db_index=True)
+    world_id = models.CharField(db_index=True, max_length=50)
+    level_id = models.CharField(db_index=True, max_length=50)
     user = models.ForeignKey(WormUser)
     scenario_size = models.CharField(max_length=150)
     scenario_size_width = models.IntegerField()
@@ -33,7 +33,10 @@ class Scenario(models.Model):
     speed = models.IntegerField()
     time = models.IntegerField()
     visibility = models.IntegerField()
-    worm_type = models.IntegerField()
+    worm_type = models.CharField(max_length=50)
+    totalscore = models.IntegerField(default=0)
+    percent_pass = models.IntegerField(default=0)
+    bacteria_visibility_range = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.token_partida)
@@ -51,7 +54,7 @@ class Obstacle(models.Model):
     coord_y = models.IntegerField()
     width = models.IntegerField()
     height = models.IntegerField()
-    type = models.IntegerField()
+    type = models.CharField(max_length=50)
     scenario = models.ForeignKey(Scenario,related_name="obstacles",on_delete=models.CASCADE)
 
     def __str__(self):
@@ -63,7 +66,7 @@ class Decor(models.Model):
     coord_y = models.IntegerField()
     width = models.IntegerField()
     height = models.IntegerField()
-    type = models.IntegerField()
+    type = models.CharField(max_length=50)
     scenario = models.ForeignKey(Scenario, related_name="decors", on_delete=models.CASCADE)
 
     def __str__(self):
@@ -75,7 +78,7 @@ class Bacterium(models.Model):
     coord_y = models.IntegerField()
     width = models.IntegerField()
     height = models.IntegerField()
-    type = models.IntegerField()
+    type = models.CharField(max_length=50)
     score = models.IntegerField()
     scenario = models.ForeignKey(Scenario, related_name="bacteria", on_delete=models.CASCADE)
 

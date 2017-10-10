@@ -4,9 +4,7 @@ from api.models import WormUser, Scenario, Action, Bacterium, Decor, Obstacle
 from django.db import IntegrityError
 
 
-
 class WormUserSerializer(serializers.ModelSerializer):
-    #username = serializers.CharField(source='user.username')
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
     email = serializers.CharField(source='user.email', required=True)
@@ -14,11 +12,9 @@ class WormUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = WormUser
-        #fields = ('id', 'username', 'first_name', 'last_name', 'birth_date', 'gender', 'email', 'password')
         fields = ('id', 'first_name', 'last_name', 'birth_date', 'gender', 'email', 'password')
 
     def update(self, instance, validated_data):
-        #instance.user.username = validated_data.get('user.username', instance.user.username)
         instance.user.first_name = validated_data.get('user.first_name', instance.user.first_name)
         instance.user.last_name = validated_data.get('user.last_name', instance.user.last_name)
         instance.user.email = validated_data.get('user.email', instance.user.email)
@@ -75,7 +71,7 @@ class ScenarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Scenario
-        fields = ('id', 'token_partida', 'world_num', 'level_num', 'user', 'scenario_size', 'scenario_size_width', 'scenario_size_height', 'speed', 'time', 'visibility', 'worm_type', 'obstacles', 'decors', 'bacteria')
+        fields = ('id', 'token_partida', 'world_id', 'level_id', 'user', 'scenario_size', 'scenario_size_width', 'scenario_size_height', 'speed', 'time', 'visibility', 'worm_type', 'obstacles', 'decors', 'bacteria', 'totalscore', 'percent_pass', 'bacteria_visibility_range')
 
     def create(self, validated_data):
         obstacles_data = validated_data.pop('obstacles')

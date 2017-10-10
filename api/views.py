@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from rest_framework import viewsets
-from django.shortcuts import render
 from api.models import WormUser, Scenario, Action, Decor, Obstacle, Bacterium
 from api.serializers import WormUserSerializer, ScenarioSerializer, ActionSerializer, BacteriumSerializer, DecorSerializer, ObstacleSerializer
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ParseError
