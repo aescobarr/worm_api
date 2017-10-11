@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from api.models import WormUser, Scenario, Action, Bacterium, Decor, Obstacle
 from django.db import IntegrityError
+from django.shortcuts import get_object_or_404
 
 
 class WormUserSerializer(serializers.ModelSerializer):
@@ -89,6 +90,20 @@ class ScenarioSerializer(serializers.ModelSerializer):
 
 
 class ActionSerializer(serializers.ModelSerializer):
+    token_partida = serializers.CharField(source='scenario')
+
     class Meta:
         model = Action
-        fields = '__all__'
+        fields = ('token_partida', 'event', 'action_timestamp', 'time_remaining', 'points')
+
+    def create(self, validated_data):
+        token_partida = validated_data.get('scenario')
+        s = get_object_or_404(Scenario,token_partida=token_partida)
+        action = Action.objects.create(
+            event=validated_data.get('event'),
+            action_timestamp=validated_data.get('action_timestamp'),
+            time_remaining=validated_data.get('time_remaining'),
+            points=validated_data.get('points'),
+            scenario=s
+        )
+        return action

@@ -23,7 +23,7 @@ class WormUser(models.Model):
 
 
 class Scenario(models.Model):
-    token_partida = models.CharField(max_length=150)
+    token_partida = models.CharField(max_length=150,unique=True)
     world_id = models.CharField(db_index=True, max_length=50)
     level_id = models.CharField(db_index=True, max_length=50)
     user = models.ForeignKey(WormUser)
@@ -92,6 +92,6 @@ ACTION_CHOICES = (('turn_right','Turn right'), ('turn_left','Turn left'), ('coll
 class Action(models.Model):
     scenario = models.ForeignKey(Scenario, related_name="actions", on_delete=models.CASCADE)
     event = models.CharField(max_length=20,choices=ACTION_CHOICES)
-    timestamp = models.DateTimeField(auto_now_add=True, blank=True)
+    action_timestamp = models.IntegerField()
     time_remaining = models.FloatField()
-    total_points = models.IntegerField()
+    points = models.IntegerField(default=0)
