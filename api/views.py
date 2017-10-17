@@ -34,6 +34,15 @@ class ScenarioViewSet(viewsets.ModelViewSet):
     queryset = Scenario.objects.all()
     serializer_class = ScenarioSerializer
 
+    def get_serializer(self, *args, **kwargs):
+        if "data" in kwargs:
+            data = kwargs["data"]
+
+            if isinstance(data, list):
+                kwargs["many"] = True
+
+        return super(ScenarioViewSet, self).get_serializer(*args, **kwargs)
+
 
 class ObstacleViewSet(viewsets.ModelViewSet):
     queryset = Obstacle.objects.all()
