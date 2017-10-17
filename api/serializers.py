@@ -72,7 +72,7 @@ class ScenarioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Scenario
-        fields = ('id', 'token_partida', 'world_id', 'level_id', 'user', 'scenario_size', 'scenario_size_width', 'scenario_size_height', 'speed', 'time', 'visibility', 'worm_type', 'obstacles', 'decors', 'bacteria', 'totalscore', 'percent_pass', 'bacteria_visibility_range')
+        fields = ('id', 'token_partida', 'world_id', 'level_id', 'user', 'scenario_size', 'scenario_size_width', 'scenario_size_height', 'speed', 'time', 'visibility', 'worm_type', 'obstacles', 'decors', 'bacteria', 'totalscore', 'percent_pass')
 
     def create(self, validated_data):
         obstacles_data = validated_data.pop('obstacles')

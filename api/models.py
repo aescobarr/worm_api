@@ -36,7 +36,6 @@ class Scenario(models.Model):
     worm_type = models.CharField(max_length=50)
     totalscore = models.IntegerField(default=0)
     percent_pass = models.IntegerField(default=0)
-    bacteria_visibility_range = models.IntegerField(default=0)
 
     def __str__(self):
         return str(self.token_partida)
@@ -86,12 +85,10 @@ class Bacterium(models.Model):
         return str(self.id)
 
 
-ACTION_CHOICES = (('turn_right','Turn right'), ('turn_left','Turn left'), ('collision','Player crashed against an obstacle'), ('element_viewed','Player discovered resource'), ('element_caught','Player picked up resource'), ('start','Player started game'), ('end', 'Player ended game'))
-
 
 class Action(models.Model):
     scenario = models.ForeignKey(Scenario, related_name="actions", on_delete=models.CASCADE)
-    event = models.CharField(max_length=20,choices=ACTION_CHOICES)
+    event = models.CharField(max_length=20)
     action_timestamp = models.IntegerField()
     time_remaining = models.FloatField()
     points = models.IntegerField(default=0)
