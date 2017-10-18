@@ -11,7 +11,7 @@ from rest_framework.authtoken.models import Token
 class WormUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1)
-    birth_date = models.CharField(max_length=8)
+    birth_date = models.CharField(max_length=10)
 
     @receiver(post_save, sender=User)
     def create_auth_token(sender, instance=None, created=False, **kwargs):
