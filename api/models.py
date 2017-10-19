@@ -87,8 +87,9 @@ class Bacterium(models.Model):
 
 
 class Action(models.Model):
-    scenario = models.ForeignKey(Scenario, related_name="actions", on_delete=models.CASCADE)
+    scenario = models.ForeignKey(Scenario, related_name="actions", on_delete=models.CASCADE, null=True, blank=True)
     event = models.CharField(max_length=20)
     action_timestamp = models.IntegerField()
     time_remaining = models.FloatField()
     points = models.IntegerField(default=0)
+    token_partida = models.CharField(max_length=150, default='')

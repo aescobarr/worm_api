@@ -90,12 +90,13 @@ class ScenarioSerializer(serializers.ModelSerializer):
 
 
 class ActionSerializer(serializers.ModelSerializer):
-    token_partida = serializers.CharField(source='scenario')
+    #token_partida = serializers.CharField(source='scenario')
 
     class Meta:
         model = Action
         fields = ('token_partida', 'event', 'action_timestamp', 'time_remaining', 'points')
 
+    '''
     def create(self, validated_data):
         token_partida = validated_data.get('scenario')
         s = get_object_or_404(Scenario,token_partida=token_partida)
@@ -107,3 +108,4 @@ class ActionSerializer(serializers.ModelSerializer):
             scenario=s
         )
         return action
+    '''
