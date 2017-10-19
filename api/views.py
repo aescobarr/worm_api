@@ -89,9 +89,19 @@ def api_login(request):
         if user is not None:
             wormuser = WormUser.objects.get(user=user)
             levels = Scenario.objects.filter(user=wormuser)
-            level_data = []
+            level_data = {}
+            dict_list = []
             for level in levels:
-                level_data.append({"screen_id":level.level_id,"points": level.get_points()})
-            return Response({'user': wormuser.id, "levels": level_data})
+                try:
+                    current_points = level_data[level.level_id]
+                    if level.get_points() > current_points:
+                        level_data[level.level_id] = level.get_points()
+                except KeyError:
+                    level_data[level.level_id] = level.get_points()
+                #level_data.append({"screen_id":level.level_id,"points": level.get_points()})
+            for key,value in level_data.iteritems():
+                temp = {key:value}
+                dict_list.append(temp)
+            return Response({'user': wormuser.id, "levels": dict_list})
         else:
             raise ParseError(detail='Authentication error')
