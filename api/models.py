@@ -42,7 +42,8 @@ class Scenario(models.Model):
 
     def get_points(self):
         max_points = 0
-        for end_action in self.actions.filter(event='end'):
+        actions = Action.objects.filter(event='end').filter(token_partida=self.token_partida)
+        for end_action in actions:
             if end_action.points > max_points:
                 max_points = end_action.points
         return max_points
@@ -87,7 +88,7 @@ class Bacterium(models.Model):
 
 
 class Action(models.Model):
-    scenario = models.ForeignKey(Scenario, related_name="actions", on_delete=models.CASCADE, null=True, blank=True)
+    #scenario = models.ForeignKey(Scenario, related_name="actions", on_delete=models.CASCADE, null=True, blank=True)
     event = models.CharField(max_length=20)
     action_timestamp = models.IntegerField()
     time_remaining = models.FloatField()
