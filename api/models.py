@@ -43,8 +43,8 @@ class Scenario(models.Model):
     def get_points(self):
         max_points = 0
         for end_action in self.actions.filter(event='end'):
-            if end_action.total_points > max_points:
-                max_points = end_action.total_points
+            if end_action.points > max_points:
+                max_points = end_action.points
         return max_points
 
 
