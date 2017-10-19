@@ -91,7 +91,7 @@ def api_login(request):
             levels = Scenario.objects.filter(user=wormuser)
             level_data = []
             for level in levels:
-                level_data.append({"screen_id":level.id,"points": level.get_points()})
+                level_data.append({"screen_id":level.level_id,"points": level.get_points()})
             return Response({'user': wormuser.id, "levels": level_data})
         else:
             raise ParseError(detail='Authentication error')
