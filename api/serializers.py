@@ -94,7 +94,7 @@ class ActionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Action
-        fields = ('token_partida', 'event', 'action_timestamp', 'time_remaining', 'points')
+        fields = ('token_partida', 'event', 'action_timestamp', 'time_remaining', 'points', 'pos_x', 'pos_y')
 
     '''
     def create(self, validated_data):
