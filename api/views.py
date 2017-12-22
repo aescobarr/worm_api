@@ -76,15 +76,15 @@ class ActionViewSet(viewsets.ModelViewSet):
 @api_view(['POST'])
 def api_login(request):
     if request.method == 'POST':
-        email = request.data.get('email', '')
+        username = request.data.get('username', '')
         password = request.data.get('password', '')
 
-        if email == '' or password == '':
-            raise ParseError(detail='Email and password are mandatory')
+        if username == '' or password == '':
+            raise ParseError(detail='Username and password are mandatory')
 
-        user = get_object_or_404(User, email=email)
+        user = get_object_or_404(User, username=username)
 
-        user = authenticate(username=user.username, password=password)
+        user = authenticate(username=username, password=password)
 
         if user is not None:
             wormuser = WormUser.objects.get(user=user)

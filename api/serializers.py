@@ -8,18 +8,23 @@ from django.shortcuts import get_object_or_404
 class WormUserSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
-    email = serializers.CharField(source='user.email', required=True)
-    password = serializers.CharField(source='user.password')
+    email = serializers.CharField(source='user.email', required=False)
+    username = serializers.CharField(source='user.username', required=True)
+    password = serializers.CharField(source='user.password', required=True)
 
     class Meta:
         model = WormUser
-        fields = ('id', 'first_name', 'last_name', 'birth_date', 'gender', 'email', 'password')
+        fields = ('id', 'first_name', 'last_name', 'birth_date', 'gender', 'email', 'password', 'username')
 
     def update(self, instance, validated_data):
         instance.user.first_name = validated_data.get('user.first_name', instance.user.first_name)
         instance.user.last_name = validated_data.get('user.last_name', instance.user.last_name)
-        instance.user.email = validated_data.get('user.email', instance.user.email)
-        instance.user.username = instance.user.email
+        try:
+            instance.user.email = validated_data.get('user.email', instance.user.email)
+        except KeyError:
+            instance.user.email = ''
+        instance.user.username = validated_data.get('user.username', instance.user.username)
+        #instance.user.username = instance.user.email
         instance.user.password = validated_data.get('user.password', instance.user.password)
         instance.birth_date = validated_data.get('birth_date', instance.birth_date)
         instance.gender = validated_data.get('gender', instance.gender)
@@ -27,16 +32,26 @@ class WormUserSerializer(serializers.ModelSerializer):
         return instance
 
     def create(self, validated_data):
-        email = validated_data.get('user')['email']
         try:
-            user = User.objects.create_user(username=email,first_name=validated_data.get('user')['first_name'],last_name=validated_data.get('user')['last_name'],email=email,password=validated_data.get('user')['password'],)
+            email = validated_data.get('user')['email']
+        except KeyError:
+            email = ''
+        try:
+            user = User.objects.create_user(username=validated_data.get('user')['username'],first_name=validated_data.get('user')['first_name'],last_name=validated_data.get('user')['last_name'],email=email,password=validated_data.get('user')['password'],)
         except IntegrityError as ext:
-            raise serializers.ValidationError(detail="There is a user with this email address already!")
+            raise serializers.ValidationError(detail=ext.message)
         wormuser = WormUser.objects.create(birth_date=validated_data.get('birth_date'),gender=validated_data.get('gender'), user=user)
         return wormuser
 
+    def validate_username(self, value):
+        #if self and self.instance and self.instance.id and WormUser.objects.filter(user__username=value).exclude(id=self.instance.id).exists():
+        if WormUser.objects.filter(user__username=value).exists():
+            raise serializers.ValidationError(detail="There is a user with this username already!")
+        return value
+
     def validate_email(self,value):
-        if self and self.instance and self.instance.ide and WormUser.objects.filter(user__email=value).exclude(id=self.instance.id).exists():
+        #if self and self.instance and self.instance.id and WormUser.objects.filter(user__email=value).exclude(id=self.instance.id).exists():
+        if value.strip() != '' and WormUser.objects.filter(user__email=value).exists():
             raise serializers.ValidationError(detail="There is a user with this email address already!")
         return value
 
