@@ -6,8 +6,8 @@ from django.shortcuts import get_object_or_404
 
 
 class WormUserSerializer(serializers.ModelSerializer):
-    first_name = serializers.CharField(source='user.first_name')
-    last_name = serializers.CharField(source='user.last_name')
+    first_name = serializers.CharField(source='user.first_name', required=False)
+    last_name = serializers.CharField(source='user.last_name', required=False)
     email = serializers.CharField(source='user.email', required=False)
     username = serializers.CharField(source='user.username', required=True)
     password = serializers.CharField(source='user.password', required=True)
@@ -37,7 +37,15 @@ class WormUserSerializer(serializers.ModelSerializer):
         except KeyError:
             email = ''
         try:
-            user = User.objects.create_user(username=validated_data.get('user')['username'],first_name=validated_data.get('user')['first_name'],last_name=validated_data.get('user')['last_name'],email=email,password=validated_data.get('user')['password'],)
+            first_name = validated_data.get('user')['first_name']
+        except KeyError:
+            first_name = ''
+        try:
+            last_name = validated_data.get('user')['last_name']
+        except KeyError:
+            last_name = ''
+        try:
+            user = User.objects.create_user(username=validated_data.get('user')['username'],first_name=first_name,last_name=last_name,email=email,password=validated_data.get('user')['password'],)
         except IntegrityError as ext:
             raise serializers.ValidationError(detail=ext.message)
         wormuser = WormUser.objects.create(birth_date=validated_data.get('birth_date'),gender=validated_data.get('gender'), user=user)
