@@ -11,6 +11,8 @@ class WormUserSerializer(serializers.ModelSerializer):
     email = serializers.CharField(source='user.email', required=False)
     username = serializers.CharField(source='user.username', required=True)
     password = serializers.CharField(source='user.password', required=True)
+    birth_date = serializers.CharField(required=False)
+    gender = serializers.CharField(required=False)
 
     class Meta:
         model = WormUser
