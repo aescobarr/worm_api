@@ -26,7 +26,7 @@ class Scenario(models.Model):
     token_partida = models.CharField(max_length=150,unique=True)
     world_id = models.CharField(db_index=True, max_length=50)
     level_id = models.CharField(db_index=True, max_length=50)
-    user = models.ForeignKey(WormUser)
+    user = models.ForeignKey(WormUser, on_delete=models.CASCADE)
     scenario_size = models.CharField(max_length=150)
     scenario_size_width = models.IntegerField()
     scenario_size_height = models.IntegerField()
