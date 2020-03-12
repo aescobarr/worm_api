@@ -99,7 +99,7 @@ def api_login(request):
                 except KeyError:
                     level_data[level.level_id] = level.get_points()
                 #level_data.append({"screen_id":level.level_id,"points": level.get_points()})
-            for key,value in level_data.iteritems():
+            for key,value in level_data.items():
                 temp = {key:value}
                 dict_list.append(temp)
             return Response({'user': wormuser.id, "levels": dict_list})

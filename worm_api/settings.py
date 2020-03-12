@@ -134,4 +134,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-from settings_local import *
+from worm_api.settings_local import *
