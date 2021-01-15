@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from rest_framework import viewsets
-from api.models import WormUser, Scenario, Action, Decor, Obstacle, Bacterium
-from api.serializers import WormUserSerializer, ScenarioSerializer, ActionSerializer, BacteriumSerializer, DecorSerializer, ObstacleSerializer
+from api.models import WormUser, Scenario, Action, Decor, Obstacle, Bacterium, Group
+from api.serializers import WormUserSerializer, ScenarioSerializer, ActionSerializer, BacteriumSerializer, DecorSerializer, ObstacleSerializer, GroupSerializer
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ParseError
@@ -29,6 +29,10 @@ class WormUserViewSet(VerboseCreateModelMixin, viewsets.ModelViewSet):
     queryset = WormUser.objects.all()
     serializer_class = WormUserSerializer
 
+
+class GroupViewSet(VerboseCreateModelMixin, viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
 
 class ScenarioViewSet(viewsets.ModelViewSet):
     queryset = Scenario.objects.all()

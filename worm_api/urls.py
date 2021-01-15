@@ -21,6 +21,7 @@ from api import views
 router = routers.DefaultRouter()
 router.register(r'wormuser', views.WormUserViewSet)
 router.register(r'scenario', views.ScenarioViewSet)
+router.register(r'group', views.GroupViewSet)
 #router.register(r'obstacle', views.ObstacleViewSet, base_name='obstacle')
 #router.register(r'decor', views.DecorViewSet, base_name='decor')
 #router.register(r'bacterium', views.BacteriumViewSet, base_name='bacterium')

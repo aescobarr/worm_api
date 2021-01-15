@@ -1,8 +1,14 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from api.models import WormUser, Scenario, Action, Bacterium, Decor, Obstacle
+from api.models import WormUser, Scenario, Action, Bacterium, Decor, Obstacle, Group
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = '__all__'
 
 
 class WormUserSerializer(serializers.ModelSerializer):
@@ -13,10 +19,11 @@ class WormUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(source='user.password', required=True)
     birth_date = serializers.CharField(required=False)
     gender = serializers.CharField(required=False)
+    group = serializers.PrimaryKeyRelatedField(queryset=Group.objects.all(), required=False)
 
     class Meta:
         model = WormUser
-        fields = ('id', 'first_name', 'last_name', 'birth_date', 'gender', 'email', 'password', 'username')
+        fields = ('id', 'first_name', 'last_name', 'birth_date', 'gender', 'email', 'password', 'username', 'group')
 
     def update(self, instance, validated_data):
         instance.user.first_name = validated_data.get('user.first_name', instance.user.first_name)
@@ -30,6 +37,7 @@ class WormUserSerializer(serializers.ModelSerializer):
         instance.user.password = validated_data.get('user.password', instance.user.password)
         instance.birth_date = validated_data.get('birth_date', instance.birth_date)
         instance.gender = validated_data.get('gender', instance.gender)
+        instance.group = validated_data.get('group', instance.group)
         instance.save()
         return instance
 
@@ -50,7 +58,7 @@ class WormUserSerializer(serializers.ModelSerializer):
             user = User.objects.create_user(username=validated_data.get('user')['username'],first_name=first_name,last_name=last_name,email=email,password=validated_data.get('user')['password'],)
         except IntegrityError as ext:
             raise serializers.ValidationError(detail=ext.message)
-        wormuser = WormUser.objects.create(birth_date=validated_data.get('birth_date'),gender=validated_data.get('gender'), user=user)
+        wormuser = WormUser.objects.create(birth_date=validated_data.get('birth_date'),gender=validated_data.get('gender'), user=user, group=validated_data.get('group'))
         return wormuser
 
     def validate_username(self, value):

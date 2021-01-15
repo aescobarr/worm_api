@@ -8,8 +8,16 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 
+class Group(models.Model):
+    name = models.CharField(max_length=500,unique=True)
+
+    def __str__(self):
+        return '%s' % (self.name)
+
+
 class WormUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, blank=True, null=True, related_name='wormusers')
     gender = models.CharField(max_length=1, null=True)
     birth_date = models.CharField(max_length=10, null=True)
 
